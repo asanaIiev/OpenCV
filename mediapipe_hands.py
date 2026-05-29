@@ -29,15 +29,15 @@ while True:
 
     if processed_hands.multi_hand_landmarks:
         for hand_id, hand in enumerate(processed_hands.multi_hand_landmarks):
-            draw_hands.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS)
+            draw_hands.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS) #Draw landmarks on hands with connections
 
             h, w, _ = frame.shape
 
-            x, y = round(hand.landmark[0].x * w), round(hand.landmark[0].y * h)
-            cv2.putText(frame, f'{hand_id+1}', (x, y+30), cv2.FONT_HERSHEY_TRIPLEX,
+            x0, y0 = round(hand.landmark[0].x * w), round(hand.landmark[0].y * h) #Hand's unique ids
+            cv2.putText(frame, f'{hand_id+1}', (x0, y0+30), cv2.FONT_HERSHEY_TRIPLEX,
                         0.8, COLOR_LIGHTBLUE_RGB[::-1], 1)
 
-            x8, y8 = round(hand.landmark[8].x * w), round(hand.landmark[8].y * h)
+            x8, y8 = round(hand.landmark[8].x * w), round(hand.landmark[8].y * h) #Drawing functionality with 8's landmark
             if cv2.waitKey(1) & 0xFF == ord('p'):
                 canvas_points.append((x8, y8))
             else:
@@ -49,16 +49,16 @@ while True:
                     cv2.line(frame, canvas_points[i-1], canvas_points[i], COLOR_LIGHTBLUE_RGB[::-1], 5)
 
             total_fingers = 0
-            for dot_id, xyz in enumerate(hand.landmark):
+            for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmarks
                 x, y = round(xyz.x * w), round(xyz.y * h)
                 cv2.putText(frame, f'{dot_id}', (x, y), cv2.FONT_HERSHEY_TRIPLEX,
                             0.6, (0,0,0), 2)
 
                 fingers = []
-                if dot_id in [4, 8, 12, 16, 20]:
+                if dot_id in [4, 8, 12, 16, 20]: #Paste circles on these landmarks
                     cv2.circle(frame, (x, y), 7, COLOR_LIGHTBLUE_RGB[::-1], -1)
 
-                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y:
+                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count fingers
                     fingers.append(1)
 
                 elif dot_id == 4:

@@ -50,15 +50,15 @@ while True:
 
             total_fingers = 0
             for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmarks
-                x, y = round(xyz.x * w), round(xyz.y * h)
-                cv2.putText(frame, f'{dot_id}', (x, y), cv2.FONT_HERSHEY_TRIPLEX,
+                x_landmarks, y_landmarks = round(xyz.x * w), round(xyz.y * h)
+                cv2.putText(frame, f'{dot_id}', (x_landmarks, y_landmarks), cv2.FONT_HERSHEY_TRIPLEX,
                             0.6, (0,0,0), 2)
 
                 fingers = []
                 if dot_id in [4, 8, 12, 16, 20]: #Paste circles on these landmarks
                     cv2.circle(frame, (x, y), 7, COLOR_LIGHTBLUE_RGB[::-1], -1)
 
-                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count fingers
+                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count showed fingers
                     fingers.append(1)
 
                 elif dot_id == 4:
@@ -72,7 +72,7 @@ while True:
             cv2.putText(frame, f'Fingers: {total_fingers}', (10, 70), cv2.FONT_HERSHEY_COMPLEX,
                             0.8, (255, 255, 255), 1)
 
-        cv2.putText(frame, f'Detected hands: {len(processed_hands.multi_hand_landmarks)}',
+        cv2.putText(frame, f'Detected hands: {len(processed_hands.multi_hand_landmarks)}', #Count detected hands
                     (10, 40), cv2.FONT_HERSHEY_COMPLEX,
                 0.8, (255, 255, 255), 1)
 

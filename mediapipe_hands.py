@@ -10,8 +10,8 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
     static_image_mode=False,
     max_num_hands=2,
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5
+    min_detection_confidence=0.3,
+    min_tracking_confidence=0.3
 )
 draw_hands = mp.solutions.drawing_utils
 
@@ -49,7 +49,7 @@ while True:
                     cv2.line(frame, canvas_points[i-1], canvas_points[i], COLOR_LIGHTBLUE_RGB[::-1], 5)
 
             total_fingers = 0
-            for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmarks
+            for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmark
                 x_landmarks, y_landmarks = round(xyz.x * w), round(xyz.y * h)
                 cv2.putText(frame, f'{dot_id}', (x_landmarks, y_landmarks), cv2.FONT_HERSHEY_TRIPLEX,
                             0.6, (0,0,0), 2)

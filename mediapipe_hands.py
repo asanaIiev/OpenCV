@@ -27,6 +27,8 @@ while True:
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     processed_hands = hands.process(rgb_frame)
 
+    total_fingers = 0
+
     if processed_hands.multi_hand_landmarks:
         for hand_id, hand in enumerate(processed_hands.multi_hand_landmarks):
             draw_hands.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS) #Draw landmarks on hands with connections
@@ -48,28 +50,28 @@ while True:
                 if canvas_points[i-1] is not None and canvas_points[i] is not None:
                     cv2.line(frame, canvas_points[i-1], canvas_points[i], COLOR_LIGHTBLUE_RGB[::-1], 5)
 
-            total_fingers = 0
+            fingers = []
             for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmark
                 x_landmarks, y_landmarks = round(xyz.x * w), round(xyz.y * h)
                 cv2.putText(frame, f'{dot_id}', (x_landmarks, y_landmarks), cv2.FONT_HERSHEY_TRIPLEX,
                             0.6, (0,0,0), 2)
 
-                fingers = []
                 if dot_id in [4, 8, 12, 16, 20]: #Paste circles on these landmarks
                     cv2.circle(frame, (x_landmarks, y_landmarks), 7, COLOR_LIGHTBLUE_RGB[::-1], -1)
 
-                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count showed fingers
+                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id - 1].y: #Count showed fingers
                     fingers.append(1)
 
                 elif dot_id == 4:
-                    if abs(hand.landmark[4].x - hand.landmark[2].x) > 0.05:
+                    if hand.landmark[4].x < hand.landmark[3].x:
                         fingers.append(1)
                     else:
                         fingers.append(0)
-                else: fingers.append(0)
+                else:
+                    fingers.append(0)
+            total_fingers += sum(fingers)
 
-                total_fingers += sum(fingers)
-            cv2.putText(frame, f'Fingers: {total_fingers}', (10, 70), cv2.FONT_HERSHEY_COMPLEX,
+        cv2.putText(frame, f'Fingers: {total_fingers}', (10, 70), cv2.FONT_HERSHEY_COMPLEX,
                             0.8, (255, 255, 255), 1)
 
         cv2.putText(frame, f'Detected hands: {len(processed_hands.multi_hand_landmarks)}', #Count detected hands

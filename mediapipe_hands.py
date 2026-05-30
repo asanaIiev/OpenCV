@@ -59,16 +59,9 @@ while True:
                 if dot_id in [4, 8, 12, 16, 20]: #Paste circles on these landmarks
                     cv2.circle(frame, (x_landmarks, y_landmarks), 7, COLOR_LIGHTBLUE_RGB[::-1], -1)
 
-                if dot_id in [8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id - 1].y: #Count showed fingers
+                if dot_id in [4, 8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count showed fingers
                     fingers.append(1)
-
-                elif dot_id == 4:
-                    if hand.landmark[4].x < hand.landmark[3].x:
-                        fingers.append(1)
-                    else:
-                        fingers.append(0)
-                else:
-                    fingers.append(0)
+                else: fingers.append(0)
             total_fingers += sum(fingers)
 
         cv2.putText(frame, f'Fingers: {total_fingers}', (10, 70), cv2.FONT_HERSHEY_COMPLEX,

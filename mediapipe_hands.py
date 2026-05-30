@@ -45,7 +45,6 @@ while True:
             else:
                 if len(canvas_points) > 0 and canvas_points[-1] is not None:
                     canvas_points.append(None)
-
             for i in range(1, len(canvas_points)):
                 if canvas_points[i-1] is not None and canvas_points[i] is not None:
                     cv2.line(frame, canvas_points[i-1], canvas_points[i], COLOR_LIGHTBLUE_RGB[::-1], 5)

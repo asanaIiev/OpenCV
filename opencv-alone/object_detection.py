@@ -20,7 +20,7 @@ os.makedirs(photos, exist_ok=True)
 recordings = 'recordings'
 os.makedirs(recordings, exist_ok=True)
 
-model = YOLO('yolo_pt/yolo11n.pt')
+model = YOLO('../yolo_pt/yolo11n.pt')
 labels = ['airplane', 'car', 'cat', 'dog', 'person']
 
 while True:

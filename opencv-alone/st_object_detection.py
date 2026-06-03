@@ -6,16 +6,17 @@ import numpy as np
 import tempfile
 
 st.sidebar.title('OpenCV')
+
 models = st.sidebar.selectbox('Choose YOLO Model',
                               ['yolo_pt/yolov5nu.pt', 'yolo_pt/yolov8n.pt',
                                'yolo_pt/yolo11n.pt', 'yolo_pt/yolo26n.pt'])
 mode_type = st.sidebar.radio('Mode type', ['Photo', 'Video', 'Camera'])
-
 model = YOLO(models)
-labels = list(model.names.values())
 
+labels = list(model.names.values())
 select_labels = st.sidebar.multiselect('Choose classes for detection', labels,
                        default=['person'])
+
 sidebar_button = st.sidebar.button('Detect')
 
 def predict(frame):
@@ -41,8 +42,10 @@ if mode_type == 'Photo':
     if uploaded_image and sidebar_button:
         byte_image = np.asarray(bytearray(uploaded_image.read()), dtype=np.uint8)
         image = cv2.imdecode(byte_image, cv2.IMREAD_COLOR)
+
         detection, quantity = predict(image)
         rgb_image = cv2.cvtColor(detection, cv2.COLOR_BGR2RGB)
+
         st.image(rgb_image, 'Detected image', use_container_width=True)
         st.write(f'Detected objects: {quantity}')
 
@@ -62,8 +65,8 @@ elif mode_type == 'Video':
 
             detection, quantity = predict(frames)
             rgb_video = cv2.cvtColor(detection, cv2.COLOR_BGR2RGB)
-            video_placeholder.image(rgb_video)
 
+            video_placeholder.image(rgb_video)
             text_placeholder.json(quantity)
 
         capture.release()
@@ -86,14 +89,14 @@ elif mode_type == 'Camera' and sidebar_button:
 
         detection, quantity = predict(frames)
         rgb_frame = cv2.cvtColor(detection, cv2.COLOR_BGR2RGB)
-        video_placeholder.image(rgb_frame)
 
+        video_placeholder.image(rgb_frame)
         detected_objects = [key for key in quantity.keys() if key in select_labels]
-        total_objects = sum(value for key, value in quantity.items() if key in select_labels)
+        total_objects = sum(value for key, value in quantity.values() if key in select_labels)
         text_placeholder.markdown(
-            f"**FPS**: {fps} | "
-            f"**Objects quantity**: {total_objects} | "
-            f"**Classes**: {', '.join(detected_objects)}"
+            f'FPS: {fps}'
+            f'Detected objects: {', '.join(detected_objects)}'
+            f'Objects quantity: {total_objects}'
         )
 
     capture.release()

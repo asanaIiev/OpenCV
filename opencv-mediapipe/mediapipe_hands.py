@@ -17,7 +17,6 @@ draw_hands = mp.solutions.drawing_utils
 
 canvas_points = []
 
-COLOR_LIGHTBLUE_RGB = (0, 255, 255)
 while True:
     status, frame = capture.read()
     if not status: break
@@ -37,17 +36,19 @@ while True:
 
             x0, y0 = round(hand.landmark[0].x * w), round(hand.landmark[0].y * h) #Hand's unique ids
             cv2.putText(frame, f'{hand_id+1}', (x0, y0+30), cv2.FONT_HERSHEY_TRIPLEX,
-                        0.8, COLOR_LIGHTBLUE_RGB[::-1], 1)
+                        0.8, (0, 255, 255), 1)
 
             x8, y8 = round(hand.landmark[8].x * w), round(hand.landmark[8].y * h) #Drawing functionality with 8's landmark
-            if cv2.waitKey(1) & 0xFF == ord('p'):
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('p'):
                 canvas_points.append((x8, y8))
+            elif key == ord('c'): canvas_points.clear()
             else:
                 if len(canvas_points) > 0 and canvas_points[-1] is not None:
                     canvas_points.append(None)
             for i in range(1, len(canvas_points)):
                 if canvas_points[i-1] is not None and canvas_points[i] is not None:
-                    cv2.line(frame, canvas_points[i-1], canvas_points[i], COLOR_LIGHTBLUE_RGB[::-1], 5)
+                    cv2.line(frame, canvas_points[i-1], canvas_points[i], (0, 255, 255), 5)
 
             fingers = []
             for dot_id, xyz in enumerate(hand.landmark): #Paste ids for every landmark
@@ -56,7 +57,7 @@ while True:
                             0.6, (0,0,0), 2)
 
                 if dot_id in [4, 8, 12, 16, 20]: #Paste circles on these landmarks
-                    cv2.circle(frame, (x_landmarks, y_landmarks), 7, COLOR_LIGHTBLUE_RGB[::-1], -1)
+                    cv2.circle(frame, (x_landmarks, y_landmarks), 7, (0, 255, 255), -1)
 
                 if dot_id in [4, 8, 12, 16, 20] and hand.landmark[dot_id].y < hand.landmark[dot_id-1].y: #Count showed fingers
                     fingers.append(1)
@@ -66,16 +67,13 @@ while True:
         cv2.putText(frame, f'Fingers: {total_fingers}', (10, 70), cv2.FONT_HERSHEY_COMPLEX,
                             0.8, (255, 255, 255), 1)
 
-        cv2.putText(frame, f'Detected hands: {len(processed_hands.multi_hand_landmarks)}', #Count detected hands
+        cv2.putText(frame, f'Detected hands: {len(processed_hands.multi_hand_landmarks)}',
                     (10, 40), cv2.FONT_HERSHEY_COMPLEX,
                 0.8, (255, 255, 255), 1)
 
     cv2.imshow('Camera', frame)
 
-    key = cv2.waitKey(1) & 0xFF
-    if key == ord('q'): break
-    elif key == ord('c'): canvas_points.clear()
+    if cv2.waitKey(1) & 0xFF == ord('q'): break
 
 capture.release()
 cv2.destroyAllWindows()
-

@@ -103,9 +103,6 @@ while True:
                 cv2.waitKey(1)
                 last_photo_time = time.time()
 
-            if hand.landmark[2].y < hand.landmark[5]:
-
-
             index_horizontal = abs(hand.landmark[8].x - hand.landmark[5].x) > 0.1
             if index_horizontal and hand.landmark[8].y > hand.landmark[9].y:
                 exit_by_gesture = True

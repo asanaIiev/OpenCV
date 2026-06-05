@@ -41,11 +41,6 @@ frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 frame_fps = float(capture.get(cv2.CAP_PROP_FPS))
 if frame_fps == 0 or frame_fps > 100: frame_fps = 30.0
 
-video_date = datetime.datetime.now().strftime('%d.%m.%Y_%H-%M-%S')
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter(f'{videos}/video_{video_date}.mp4', fourcc, frame_fps,
-                                          (frame_width, frame_height))
-
 exit_by_gesture = False
 
 while True:
@@ -107,18 +102,17 @@ while True:
                 cv2.imshow('Photo', frame)
                 cv2.waitKey(1)
                 last_photo_time = time.time()
-                break
+
+            if hand.landmark[2].y < hand.landmark[5]:
+
 
             index_horizontal = abs(hand.landmark[8].x - hand.landmark[5].x) > 0.1
             if index_horizontal and hand.landmark[8].y > hand.landmark[9].y:
                 exit_by_gesture = True
-                break
         if exit_by_gesture: break
 
     cv2.imshow('Camera', frame)
-
-    key = cv2.waitKey(1) & 0xff
-    if key == ord('q'): break
+    cv2.waitKey(1)
 
 capture.release()
 cv2.destroyAllWindows()

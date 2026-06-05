@@ -34,12 +34,17 @@ photos = 'photos'
 os.makedirs(photos, exist_ok=True)
 last_photo_time = 0
 
-videos = 'videos'
-os.makedirs(videos, exist_ok=True)
-frame_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-frame_fps = float(capture.get(cv2.CAP_PROP_FPS))
-if frame_fps == 0 or frame_fps > 100: frame_fps = 30.0
+# videos = 'videos'
+# os.makedirs(videos, exist_ok=True)
+# frame_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+# frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+# frame_fps = float(capture.get(cv2.CAP_PROP_FPS))
+# if frame_fps == 0 or frame_fps > 100: frame_fps = 30.0
+#
+# video_date = datetime.datetime.now().strftime('%d.%m.%Y_%H-%M-%S')
+# fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+# out = cv2.VideoWriter(f'{videos}/video_{video_date}.mp4', fourcc, frame_fps,
+#                                           (frame_width, frame_height))
 
 exit_by_gesture = False
 

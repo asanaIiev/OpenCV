@@ -48,15 +48,12 @@ while True:
             if label not in labels:
                 continue
 
-            if label == 'person':
-                count += 1
+            if label == 'person': count += 1
 
-            # Отрисовка рамок объектов
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 255), 1)
             cv2.putText(frame, f'{label}', (x1, y1 - 15), cv2.FONT_HERSHEY_COMPLEX,
                         1, (255, 255, 255), 1)
 
-    # --- Отрисовка UI (уже после подсчета всех объектов) ---
     cv2.putText(frame, f'persons: {count}', (450, 80), cv2.FONT_HERSHEY_COMPLEX,
                 0.8, (255, 255, 255), 1)
 
@@ -68,13 +65,9 @@ while True:
                 0.8, (255, 255, 255), 1)
     cv2.putText(frame, 'II19', (300, 40), cv2.FONT_HERSHEY_COMPLEX,
                 1, (255, 255, 255), 1)
-
     current_date_str = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
     cv2.putText(frame, f'date: {current_date_str}', (10, 120),
                 cv2.FONT_HERSHEY_COMPLEX, 0.8, (255, 255, 255), 1)
-
-    if is_recording and out is not None:
-        out.write(frame)
 
     cv2.imshow('Video', frame)
 
@@ -88,6 +81,8 @@ while True:
         cv2.imwrite(file_name, frame)
         print(f'Photo saved: {file_name}')
 
+    if is_recording and out is not None:
+        out.write(frame)
     if key == ord('r'):
         if not is_recording:
             video_date = datetime.datetime.now().strftime('%d.%m.%Y_%H-%M-%S')

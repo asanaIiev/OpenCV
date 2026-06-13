@@ -35,10 +35,11 @@ while True:
         print('No frames')
         break
 
-    predict = model(frame, stream=True, verbose=False, conf=0.3)
+    frame = cv2.flip(frame, 1)
 
     count = 0
 
+    predict = model(frame, stream=True, verbose=False, conf=0.3)
     for f in predict:
         for obj in f.boxes:
             x1, y1, x2, y2 = map(int, obj.xyxy[0])
@@ -58,10 +59,10 @@ while True:
                 0.8, (255, 255, 255), 1)
 
     end_fps = time.time()
-    fps = 1.0 / (start_fps - end_fps)
+    fps = round(1.0 / (end_fps - start_fps))
     start_fps = end_fps
 
-    cv2.putText(frame, f'fps: {round(fps)}', (10, 80), cv2.FONT_HERSHEY_COMPLEX,
+    cv2.putText(frame, f'fps: {fps}', (10, 80), cv2.FONT_HERSHEY_COMPLEX,
                 0.8, (255, 255, 255), 1)
     cv2.putText(frame, 'II19', (300, 40), cv2.FONT_HERSHEY_COMPLEX,
                 1, (255, 255, 255), 1)
@@ -92,9 +93,6 @@ while True:
             is_recording = True
         else:
             is_recording = False
-            if out is not None:
-                out.release()
-                out = None
 
 if out is not None:
     out.release()

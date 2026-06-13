@@ -18,7 +18,7 @@ if frame_fps <= 0 or frame_fps > 30:
 photos = 'photos'
 os.makedirs(photos, exist_ok=True)
 
-recordings = 'recordings'
+recordings = 'files'
 os.makedirs(recordings, exist_ok=True)
 
 model = YOLO('../yolo_pt/yolo11n.pt')
@@ -80,7 +80,6 @@ while True:
         photo_date = datetime.datetime.now().strftime('%d.%m.%Y_%H-%M-%S')
         file_name = f'{photos}/photo_{photo_date}.jpg'
         cv2.imwrite(file_name, frame)
-        print(f'Photo saved: {file_name}')
 
     if is_recording and out is not None:
         out.write(frame)

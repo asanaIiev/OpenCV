@@ -18,10 +18,10 @@ if frame_fps <= 0 or frame_fps > 30:
 photos = 'photos'
 os.makedirs(photos, exist_ok=True)
 
-recordings = 'files'
+recordings = 'recordings'
 os.makedirs(recordings, exist_ok=True)
 
-model = YOLO('../yolo_pt/yolo11n.pt')
+model = YOLO('yolo_pt/yolo11n.pt')
 labels = ['airplane', 'car', 'cat', 'dog', 'person']
 
 is_recording = False

@@ -1,4 +1,7 @@
 opencv-alone/photos
 opencv-alone/recordings
 .idea
+.env
+opencv-roboflow/test_files
+videos_for_test
 opencv-alone/yolo_pt

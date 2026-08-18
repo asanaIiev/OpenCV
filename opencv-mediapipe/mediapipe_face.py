@@ -102,7 +102,8 @@ while True:
         if exit_by_gesture: break
 
     cv2.imshow('Camera', frame)
-    cv2.waitKey(1)
+    key = cv2.waitKey(1)
+    if key == ord('q'): break
 
 capture.release()
 cv2.destroyAllWindows()
